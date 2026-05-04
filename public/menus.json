@@ -1,0 +1,54 @@
+[
+    {
+        "key": "Categories",
+        "name": "Categories",
+        "link": "categories",
+        "order": 1,
+        "parent_key": "1",
+        "image": null,
+        "image_active": null,
+        "is_heading": 0,
+        "roles": [
+            "Admin"
+        ]
+    },
+    {
+        "key": "blog",
+        "name": "Blog",
+        "link": "blog",
+        "order": 1,
+        "parent_key": null,
+        "image": null,
+        "image_active": null,
+        "is_heading": 0,
+        "roles": [
+            "Admin"
+        ]
+    },
+    {
+        "key": "posts",
+        "name": "Posts",
+        "link": "posts",
+        "order": "2",
+        "parent_key": "1",
+        "image": null,
+        "image_active": null,
+        "is_heading": false,
+        "roles": [
+            "Admin"
+        ]
+    },
+    {
+        "key": "tags",
+        "name": "Tags",
+        "link": "tags",
+        "order": 3,
+        "parent_key": "blog",
+        "image": null,
+        "image_active": null,
+        "is_heading": 0,
+        "roles": [
+            "Admin"
+        ]
+    }
+]

@@ -1,0 +1,33 @@
+{
+    "admin": [
+        "access-admin"
+    ],
+    "menu": [
+        "view-menu",
+        "create-menu",
+        "update-menu",
+        "delete-menu"
+    ],
+    "role": [
+        "view-role",
+        "create-role",
+        "update-role",
+        "delete-role"
+    ],
+    "permission": [
+        "view-permission",
+        "create-permission",
+        "update-permission",
+        "delete-permission"
+    ],
+    "theme-option": [
+        "view-theme-option",
+        "create-theme-option",
+        "update-theme-option",
+        "delete-theme-option"
+    ],
+    "blog": [
+        "update-blog",
+        "view-blog"
+    ]
+}
