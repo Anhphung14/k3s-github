@@ -1,5 +1,10 @@
 node_modules
 vendor
 .git
-storage/framework/cache
-storage/logs
+.github
+storage/framework/cache/*.php
+storage/framework/sessions/*
+storage/framework/views/*.php
+storage/logs/*.log
+public/build
+.env

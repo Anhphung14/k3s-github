@@ -14,11 +14,26 @@ spec:
     spec:
       containers:
         - name: web-app
-          image: localhost:5000/web-app:latest
+          image: localhost:5000/web-app:latest  
           imagePullPolicy: Always
           ports:
             - containerPort: 9000
-          env:
-            - name: APP_ENV
-              value: "production"
-            # Add other environment variables (e.g., DB_HOST, DB_PASSWORD) here
+
+          resources:             
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          volumeMounts:
+            - name: env-config
+              mountPath: /var/www/html/.env
+              subPath: .env
+
+      volumes:
+        - name: env-config
+          hostPath:
+            path: /www/wwwroot/csl_laravel_starter_kit/.env
+            type: File

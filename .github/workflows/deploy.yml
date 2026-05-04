@@ -15,18 +15,28 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t localhost:5000/web-app:latest .
+          docker build \
+            --memory=700m \
+            --cpus=0.5 \
+            -t localhost:5000/web-app:latest .
 
       - name: Push to Local Registry
-        run: |
-          docker push localhost:5000/web-app:latest
+        run: docker push localhost:5000/web-app:latest
+
+      - name: Cleanup Docker
+        run: docker system prune -af
 
       - name: Apply Kubernetes Manifests
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
 
-      - name: Restart K3s Deployment
+      - name: Restart Deployment
         run: |
           kubectl rollout restart deployment web-app-deployment
           kubectl rollout status deployment web-app-deployment
+
+      - name: Run migrations
+        run: |
+          POD=$(kubectl get pods -l app=web-app -o jsonpath="{.items[0].metadata.name}")
+          kubectl exec $POD -- php artisan migrate --force

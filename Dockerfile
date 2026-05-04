@@ -1,34 +1,60 @@
-# --- Stage 1: Build Frontend ---
-FROM node:22.10.0-alpine AS frontend
-WORKDIR /app
+# ===== Stage 1: Composer =====
+FROM composer:2 AS vendor
 
+WORKDIR /app
+COPY composer.json composer.lock ./
+
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --no-scripts \
+    --no-autoloader
+
+# ===== Stage 2: Frontend =====
+FROM node:22-alpine AS frontend
+
+WORKDIR /app
 COPY package*.json ./
-RUN npm install 
+RUN npm install
 
 COPY . .
 RUN npm run build
 
-# --- Stage 2: Serve Application ---
+# ===== Stage 3: App =====
 FROM php:8.2-fpm-alpine
-WORKDIR /var/www/html
 
 RUN apk add --no-cache \
-    git curl libpng-dev libxml2-dev zip unzip oniguruma-dev
+    bash \
+    git \
+    curl \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    oniguruma-dev \
+    icu-dev
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip intl
 
-COPY composer*.json ./
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-interaction --no-scripts --no-autoloader --no-dev
+WORKDIR /var/www/html
 
+# copy dependencies
+COPY --from=vendor /app/vendor ./vendor
+
+# copy source
 COPY . .
+
+# copy frontend build
 COPY --from=frontend /app/public/build ./public/build
 
-RUN composer dump-autoload --optimize && \
-    php artisan route:clear && \
-    php artisan config:clear
+# Laravel optimize
+RUN php artisan config:clear || true && \
+    php artisan route:clear || true && \
+    php artisan view:clear || true && \
+    php artisan event:clear || true
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# permissions
+RUN chmod -R 777 storage || true
 
 EXPOSE 9000
 CMD ["php-fpm"]

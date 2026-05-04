@@ -12,12 +12,12 @@ import { themeConfig } from "@themeConfig";
 import AppTextField from "@core/components/app-form-elements/AppTextField.vue";
 import { useForm, Link, Head } from "@inertiajs/vue3";
 
-definePage({
-  meta: {
-    layout: "blank",
-    public: true,
-  },
-});
+// definePage({
+//   meta: {
+//     layout: "blank",
+//     public: true,
+//   },
+// });
 
 const form = useForm({
   login: null,
