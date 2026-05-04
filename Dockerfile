@@ -17,10 +17,13 @@ RUN composer install \
 FROM node:22-alpine AS frontend
 
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
+
+RUN npm install --ignore-scripts
 
 COPY . .
+
 RUN npm run build
 
 # ===== Stage 3: Final =====
