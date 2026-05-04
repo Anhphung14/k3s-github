@@ -19,10 +19,11 @@ FROM node:22-alpine AS frontend
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install --ignore-scripts
 
 COPY . .
+
+COPY --from=vendor /app/vendor ./vendor
 
 RUN npm run build
 
