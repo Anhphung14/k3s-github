@@ -36,7 +36,6 @@ RUN apk add --no-cache \
     icu \
     oniguruma
 
-# build extension
 RUN apk add --no-cache --virtual .build-deps \
     libpng-dev \
     libzip-dev \
@@ -47,24 +46,17 @@ RUN apk add --no-cache --virtual .build-deps \
 
 WORKDIR /var/www/html
 
-# copy full source
 COPY . .
-
-# copy vendor
 COPY --from=vendor /app/vendor ./vendor
-
-# copy frontend build
 COPY --from=frontend /app/public/build ./public/build
 
-RUN composer dump-autoload --optimize
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# cleanup Laravel
-RUN rm -rf node_modules \
-    && rm -rf tests \
-    && rm -rf storage/logs/* \
-    && php artisan config:cache || true \
-    && php artisan route:cache || true \
-    && php artisan view:cache || true
+RUN composer dump-autoload --optimize || true
+
+RUN php artisan config:cache || true \
+ && php artisan route:cache || true \
+ && php artisan view:cache || true
 
 EXPOSE 9000
 CMD ["php-fpm"]
