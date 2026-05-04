@@ -5,7 +5,7 @@ import { usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 
 const page = usePage();
-import AppLoadingIndicator from "@/components/AppLoadingIndicator.vue";
+import AppLoadingIndicator from "@/Components/AppLoadingIndicator.vue";
 
 const { injectSkinClasses } = useSkins();
 
