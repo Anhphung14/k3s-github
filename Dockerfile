@@ -2,14 +2,16 @@
 FROM composer:2 AS vendor
 
 WORKDIR /app
+
+# copy composer files
 COPY composer.json composer.lock ./
 
 RUN composer install \
     --no-dev \
     --prefer-dist \
+    --no-scripts \
     --no-interaction \
-    --no-progress \
-    --optimize-autoloader
+    --no-progress
 
 # ===== Stage 2: Frontend =====
 FROM node:22-alpine AS frontend
@@ -41,10 +43,16 @@ RUN apk add --no-cache --virtual .build-deps \
 
 WORKDIR /var/www/html
 
-# copy minimal
-COPY --from=vendor /app/vendor ./vendor
-COPY --from=frontend /app/public/build ./public/build
+# copy full source
 COPY . .
+
+# copy vendor
+COPY --from=vendor /app/vendor ./vendor
+
+# copy frontend build
+COPY --from=frontend /app/public/build ./public/build
+
+RUN composer dump-autoload --optimize
 
 # cleanup Laravel
 RUN rm -rf node_modules \
