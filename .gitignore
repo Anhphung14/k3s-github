@@ -20,7 +20,7 @@ lerna-debug.log*
 
 # Lock
 package-lock.json
-composer.lock
+# composer.lock
 
 node_modules
 .DS_Store
