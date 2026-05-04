@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: web-app
-          image: localhost:5000/web-app:latest  
+          image: localhost:5000/web-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 9000
 
-          resources:             
+          resources:
             requests:
               memory: "256Mi"
               cpu: "200m"

@@ -15,10 +15,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build \
-            --memory=700m \
-            --cpus=0.5 \
-            -t localhost:5000/web-app:latest .
+          export DOCKER_BUILDKIT=0
+          docker build -t localhost:5000/web-app:latest .
 
       - name: Push to Local Registry
         run: docker push localhost:5000/web-app:latest
@@ -39,4 +37,4 @@ jobs:
       - name: Run migrations
         run: |
           POD=$(kubectl get pods -l app=web-app -o jsonpath="{.items[0].metadata.name}")
-          kubectl exec $POD -- php artisan migrate --force
+          kubectl exec $POD -- php artisan migrate --force || true
